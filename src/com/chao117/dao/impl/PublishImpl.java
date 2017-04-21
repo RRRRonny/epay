@@ -32,21 +32,21 @@ public class PublishImpl implements BaseDAO<Goods>, ServerConstants {
 		int lines = helper.insertGoods(goods);
 		if (lines > 0) {
 			result = RESULT_SUCCESS;
-			updateErrodrCode(ERROR_NON);
+			updateErrorCode(ERROR_NON);
 		} else {
 			result = RESULT_FAILURE;
-			updateErrodrCode(ERROR_REFUSE);
+			updateErrorCode(ERROR_REFUSE);
 		}
 		return false;
 	}
 
 	@Override
-	public void updateErrodrCode(int errorCode) {
+	public void updateErrorCode(int errorCode) {
 		this.errorCode = errorCode;
 	}
 
 	@Override
-	public ServerResult<Goods> getserServerResult() {
+	public ServerResult<Goods> getServerResult() {
 		serverResult = new ServerResult<Goods>();
 		serverResult.setErrorCode(errorCode);
 		serverResult.setResult(result);

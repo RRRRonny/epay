@@ -15,7 +15,7 @@ public interface BaseDAO<O> extends ServerConstants{
 
 	boolean doOperate();
 
-	void updateErrodrCode(int errorCode);
+	void updateErrorCode(int errorCode);
 	
-	ServerResult getserServerResult();
+	ServerResult getServerResult();
 }

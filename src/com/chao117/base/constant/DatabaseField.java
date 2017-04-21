@@ -1,7 +1,7 @@
 package com.chao117.base.constant;
 
 public interface DatabaseField {
-	//general field
+    //general field
     String ID = "id";
     String U_ID = "u_id";
     String L_ID = "l_id";
@@ -43,6 +43,7 @@ public interface DatabaseField {
     //table_goods_state
     String GS_CONTENT = "gs_content";
     String GS_TIMESTAMP = "gs_timestamp";
+    String GS_REMARK = "gs_remark";
 
     //table_location
     String L_NAME = "l_name";

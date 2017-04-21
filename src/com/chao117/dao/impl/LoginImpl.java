@@ -5,9 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.chao117.base.constant.DatabaseField;
-import com.chao117.base.constant.ErrorCode;
-import com.chao117.base.constant.ServerConstants;
 import com.chao117.dao.BaseDAO;
 import com.chao117.model.ServerResult;
 import com.chao117.model.User;
@@ -48,7 +45,7 @@ public class LoginImpl implements BaseDAO<User>{
 				String targetPassword = set.getString(set.findColumn(U_PASSWORD));
 				if (password.equals(targetPassword)) {
 					System.out.println("密码匹配,允许登录");
-					updateErrodrCode(ERROR_NON);
+					updateErrorCode(ERROR_NON);
 					result = RESULT_SUCCESS;
 					//返回用户的关键信息
 					user = new User();
@@ -56,11 +53,11 @@ public class LoginImpl implements BaseDAO<User>{
 					user.setName(set.getString(set.findColumn(U_NAME)));
 					return true;
 				}else{
-					updateErrodrCode(ERROR_PASSWORD);
+					updateErrorCode(ERROR_PASSWORD);
 					return false;
 				}
 			}
-			updateErrodrCode(ERROR_USER_INEXIST);//用户不存在
+			updateErrorCode(ERROR_USER_INEXIST);//用户不存在
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -68,12 +65,12 @@ public class LoginImpl implements BaseDAO<User>{
 	}
 
 	@Override
-	public void updateErrodrCode(int errorCode) {
+	public void updateErrorCode(int errorCode) {
 		this.errorCode = errorCode;
 	}
 
 	@Override
-	public ServerResult<User> getserServerResult() {
+	public ServerResult<User> getServerResult() {
 		// TODO Auto-generated method stub
 		serverResult = new ServerResult<User>();
 		serverResult.setErrorCode(errorCode);

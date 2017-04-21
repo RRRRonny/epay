@@ -5,17 +5,19 @@ public class Category {
     private int id;
     private String name;
     private String remark;
-    private int parentCode;
+    private String parentCode;
+    private String code;
     private long timestamp;
 
     public Category() {
     }
 
-    public Category(int id, String name, String remark, int parentCode, long timestamp) {
+    public Category(int id, String name, String remark, String parentCode, String code, long timestamp) {
         this.id = id;
         this.name = name;
         this.remark = remark;
         this.parentCode = parentCode;
+        this.code = code;
         this.timestamp = timestamp;
     }
 
@@ -43,12 +45,20 @@ public class Category {
         this.remark = remark;
     }
 
-    public int getParentCode() {
+    public String getParentCode() {
         return parentCode;
     }
 
-    public void setParentCode(int parentCode) {
+    public void setParentCode(String parentCode) {
         this.parentCode = parentCode;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public long getTimestamp() {
@@ -65,7 +75,8 @@ public class Category {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", remark='" + remark + '\'' +
-                ", parentCode=" + parentCode +
+                ", parentCode='" + parentCode + '\'' +
+                ", code='" + code + '\'' +
                 ", timestamp=" + timestamp +
                 '}';
     }

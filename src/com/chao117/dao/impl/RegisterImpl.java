@@ -34,15 +34,15 @@ public class RegisterImpl implements BaseDAO<User>{
 		ResultSet set = queryUserHelper.query(user.getAccount());
 		try {
 			if(set.next()){
-				updateErrodrCode(ERROR_USER_EXIST);
+				updateErrorCode(ERROR_USER_EXIST);
 			}else{
 				InsertUserHelper insertUserHelper  = new InsertUserHelper();
 				int line  = insertUserHelper.insertAccPsw(user);
 				if (line>0) {
-					updateErrodrCode(ERROR_NON);
+					updateErrorCode(ERROR_NON);
 					result = RESULT_SUCCESS;
 				}else{
-					updateErrodrCode(ERROR_REFUSE);
+					updateErrorCode(ERROR_REFUSE);
 				}
 			}
 		} catch (SQLException e) {
@@ -52,12 +52,12 @@ public class RegisterImpl implements BaseDAO<User>{
 	}
 
 	@Override
-	public void updateErrodrCode(int errorCode) {
+	public void updateErrorCode(int errorCode) {
 		this.errorCode = errorCode;
 	}
 
 	@Override
-	public ServerResult<User> getserServerResult() {
+	public ServerResult<User> getServerResult() {
 		serverResult = new ServerResult<User>();
 		serverResult.setErrorCode(errorCode);
 		serverResult.setResult(result);
