@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 public class Test {
 	
-	@org.junit.Test
 	public void test(){
 		String sqlString  = "select * from table_user";
 		TestDBHelper helper = new TestDBHelper(sqlString);

@@ -3,7 +3,6 @@ package com.chao117.base;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.enterprise.inject.New;
 
 import org.json.JSONObject;
 
