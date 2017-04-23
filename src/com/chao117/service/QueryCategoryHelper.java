@@ -14,7 +14,7 @@ public class QueryCategoryHelper implements DatabaseField {
 
     public Category queryCategory(int id) {
         Category category = null;
-        String sqlString = "select * from table_table where id = ?";
+        String sqlString = "select * from table_category where id = ?";
         helper = new DBHelper(sqlString);
         try {
             helper.pst.setInt(1, id);

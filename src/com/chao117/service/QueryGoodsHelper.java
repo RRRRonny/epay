@@ -15,12 +15,13 @@ public class QueryGoodsHelper implements DatabaseField {
     public Goods querySingleGoods(int id) {
         String sqlString = "select * from table_goods where id  = ?";
         helper = new DBHelper(sqlString);
-        Goods goods = new Goods();
         ResultSet set = null;
+        Goods goods = null;
         try {
             helper.pst.setInt(1, id);
             set = helper.pst.executeQuery();
             if (set.next()) {
+                goods = new Goods();
                 goods.setId(set.getInt(set.findColumn(ID)));
                 //name
                 goods.setName(set.getString(set.findColumn(G_NAME)));

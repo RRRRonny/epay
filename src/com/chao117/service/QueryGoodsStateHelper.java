@@ -27,7 +27,6 @@ public class QueryGoodsStateHelper implements DatabaseField {
                 goodsState.setId(id);
                 goodsState.setContent(set.getString(set.findColumn(GS_CONTENT)));
                 goodsState.setRemark(set.getString(set.findColumn(GS_REMARK)));
-                goodsState.setTimestamp(set.getLong(set.findColumn(GS_TIMESTAMP)));
             }
         } catch (SQLException e) {
             e.printStackTrace();

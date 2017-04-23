@@ -16,7 +16,7 @@ public class QueryPictureHelper implements DatabaseField {
     private DBHelper helper;
 
     public Picture querySinglePicture(int id) {
-        String sqlString = "select * from table_picture where id = ?";
+        String sqlString = "select * from table_pics where id = ?";
         Picture picture = null;
         helper = new DBHelper(sqlString);
         try {

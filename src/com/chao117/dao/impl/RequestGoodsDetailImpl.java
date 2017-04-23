@@ -36,6 +36,8 @@ public class RequestGoodsDetailImpl implements BaseDAO<Goods> {
         goods = helper.querySingleGoods(goods);
         if (goods == null) {
             updateErrorCode(ERROR_REFUSE);
+        } else {
+            result = RESULT_SUCCESS;
         }
         return false;
     }

@@ -33,7 +33,6 @@ public class DBHelper {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            close();
         }
     }
 
