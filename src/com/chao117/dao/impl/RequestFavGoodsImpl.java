@@ -40,31 +40,23 @@ public class RequestFavGoodsImpl implements BaseDAO<User> {
         if (set == null) {
             updateErrorCode(ERROR_REFUSE);
         }
-        goodsList = new ArrayList<>();
+        List<Integer> goodsIds = null;
+        boolean mBool = false;
         try {
             while (set.next()) {
-                Goods goods = new Goods();
-                goods.setId(set.getInt(set.findColumn(ID)));
-                //联合查询
-                //location
-                Location location = new QueryLocationHelper().queryLocation(set.getInt(set.findColumn(L_ID)));
-                goods.setLocation(location);
-                //buyer
-                User buyer = new QueryUserHelper().querySingleUser(set.getInt(set.findColumn(U_B_ID)));
-                //todo 重要,逻辑混乱
-                //seller
-                User seller = new QueryUserHelper().querySingleUser(set.getInt(set.findColumn(U_S_ID)));
-                //category
-                Category category = new QueryCategoryHelper().queryCategory(set.getInt(set.findColumn(C_ID)));
-                //goods_state
-                GoodsState goodsState = new QueryGoodsStateHelper().queryGoodsState(set.getInt(set.findColumn(GS_ID)));
-
+                if (!mBool) {
+                    goodsIds = new ArrayList<>();
+                    goodsList = new ArrayList<>();
+                    mBool = !mBool;
+                }
+                goodsIds.add(set.getInt(set.findColumn(G_ID)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            updateErrorCode(ERROR_REFUSE);
-        } finally {
-            updateErrorCode(ERROR_REFUSE);
+        }
+        QueryGoodsHelper queryGoodsHelper = new QueryGoodsHelper();
+        for (int i = 0; i < goodsIds.size(); i++) {
+            goodsList.add(queryGoodsHelper.querySingleGoods(goodsIds.get(i)));
         }
         return false;
     }

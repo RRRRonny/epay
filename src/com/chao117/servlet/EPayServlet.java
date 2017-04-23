@@ -28,7 +28,15 @@ import com.google.gson.Gson;
 /**
  * Servlet implementation class TestServlet
  */
-@WebServlet({"/login", "/publish", "/register", "/test", "/loginbak", "/forUser", "/111"})
+@WebServlet({"/login", "/publish", "/register",
+        "/requestGoodsDetail", "/requestUser", "/simpleBrowse",
+        "/password", "/fav", "/requestFav",
+        "/transRequest", "/transAccept", "/transCancel", "/transCheck", "/transUpdate",
+        "/addShipAddress", "/requestShipAddress",
+        "/addHistory", "/requestHistory",
+        "/checkDatabaseVer", "/updateLocalDatabase",
+        "/searchGoods", "/requestMessages", "/publishMessage",
+        "/test", "/loginbak", "/forUser"})
 public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
     private static final long serialVersionUID = 1L;
 
@@ -128,7 +136,7 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
                 result = favGoods(preparedJson);
                 break;
             case API_TYPE_REQ_FAV://请求收藏的商品
-                //todo
+                result = requestFavGoods(preparedJson);
                 break;
             /*
                 交易相关 api
@@ -158,16 +166,16 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
                 //todo
                 break;
             case API_TYPE_REQ_GOODS_DETAIL:
-                //todo
+                result = requestGoodsDetail(preparedJson);
                 break;
              /*
                 浏览历史
                  */
             case API_TYPE_ADD_HISTORY:
-                //todo
+                result = addHistory(preparedJson);
                 break;
             case API_TYPE_REQ_HISTORY:
-                //todo
+                result = requestHistory(preparedJson);
                 break;
             /*
                 数据库更新
@@ -305,21 +313,6 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
     }
 
     /**
-     * 请求商品的具体信息
-     *
-     * @param preparedJson
-     * @return
-     */
-    private String requestGoodsInfo(PreparedJson preparedJson) {
-        show("执行 requestUserInfo");
-        String result = null;
-        Goods goods = new Gson().fromJson(preparedJson.getJsonObject().toString(), Goods.class);
-
-        //todo 具体实现
-        return result;
-    }
-
-    /**
      * 收藏商品
      *
      * @param preparedJson
@@ -337,13 +330,42 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
         return result;
     }
 
+    /**
+     * 请求收藏的商品
+     *
+     * @param preparedJson
+     * @return
+     */
     private String requestFavGoods(PreparedJson preparedJson) {
         show("执行 requestFavGoods");
         String result = null;
         User user = new Gson().fromJson(preparedJson.getJsonObject().toString(), User.class);
-
+        RequestFavGoodsImpl doRequestFavGoods = new RequestFavGoodsImpl();
+        doRequestFavGoods.init(user);
+        doRequestFavGoods.doOperate();
+        ServerResult serverResult = doRequestFavGoods.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
         return result;
     }
+
+    /**
+     * 请求商品详情
+     *
+     * @param preparedJson
+     * @return
+     */
+    private String requestGoodsDetail(PreparedJson preparedJson) {
+        show(" 执行 requestGoodsDetail");
+        String result = null;
+        Goods goods = new Gson().fromJson(preparedJson.getJsonObject().toString(), Goods.class);
+        RequestGoodsDetailImpl doRequestGoodsDetail = new RequestGoodsDetailImpl();
+        doRequestGoodsDetail.init(goods);
+        doRequestGoodsDetail.doOperate();
+        ServerResult serverResult = doRequestGoodsDetail.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
+        return result;
+    }
+
 
     /**
      * 增加收货地址
@@ -382,7 +404,43 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
         return result;
     }
 
+    /**
+     * 新增浏览历史
+     *
+     * @param preparedJson
+     * @return
+     */
+    private String addHistory(PreparedJson preparedJson) {
+        show("执行 addShipAddress");
+        String result = null;
+        History history = new Gson().fromJson(preparedJson.getJsonObject().toString(), History.class);
+        AddHistoryImpl doAddHistory = new AddHistoryImpl();
+        doAddHistory.init(history);
+        doAddHistory.doOperate();
+        ServerResult serverResult = doAddHistory.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
+        return result;
 
+    }
+
+    /**
+     * 请求浏览历史
+     *
+     * @param preparedJson
+     * @return
+     */
+    private String requestHistory(PreparedJson preparedJson) {
+        show("执行 addShipAddress");
+        String result = null;
+        User user = new Gson().fromJson(preparedJson.getJsonObject().toString(), User.class);
+        RequestHistoryImpl doRequestHistory = new RequestHistoryImpl();
+        doRequestHistory.init(user);
+        doRequestHistory.doOperate();
+        ServerResult serverResult = doRequestHistory.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
+        return result;
+
+    }
 
 
 
