@@ -29,6 +29,7 @@ public class QueryShipAddressHelper {
             e.printStackTrace();
             return set;
         } finally {
+            helper.close();
             return set;
         }
     }

@@ -40,6 +40,7 @@ public class QueryHistoryHelper implements DatabaseField {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            helper.close();
             return historyList;
         }
     }

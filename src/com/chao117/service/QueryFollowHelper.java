@@ -26,6 +26,7 @@ public class QueryFollowHelper {
             e.printStackTrace();
             return set;
         } finally {
+            helper.close();
             return set;
         }
     }

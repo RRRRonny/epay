@@ -40,6 +40,7 @@ public class InsertShipAddressHelper {
             e.printStackTrace();
             return lines;
         } finally {
+            helper.close();
             return lines;
         }
     }

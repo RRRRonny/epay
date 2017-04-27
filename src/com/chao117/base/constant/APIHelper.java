@@ -48,6 +48,12 @@ public interface APIHelper {
     String API_TYPE_PUBLISH_MSG = "publishMessage";         //发布留言
 
 
+    //2017年04月24日14:25:18
+    //交易相关,新的 api
+    String API_TYPE_CHECK_REQ_TRANSACTION = "reqTransCheck";//请求交易请求
+    String API_TYPE_CANCEL_REQ_TRANSACTION = "reqTransCancel";//取消交易请求
+
+
     /**
      * 以下为已经失效的常量
      * api 1.0 阶段的常量

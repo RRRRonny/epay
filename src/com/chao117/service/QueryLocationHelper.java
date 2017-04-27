@@ -39,6 +39,7 @@ public class QueryLocationHelper implements DatabaseField {
             e.printStackTrace();
             return location;
         } finally {
+            helper.close();
             return location;
         }
     }

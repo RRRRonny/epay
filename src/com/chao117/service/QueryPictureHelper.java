@@ -34,6 +34,7 @@ public class QueryPictureHelper implements DatabaseField {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            helper.close();
             return picture;
         }
 
@@ -68,6 +69,7 @@ public class QueryPictureHelper implements DatabaseField {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            helper.close();
             return pictureList;
         }
     }

@@ -24,12 +24,15 @@ public class InsertUserHelper implements DatabaseField {
         } catch (SQLException e) {
             e.printStackTrace();
             return result;
+        }finally {
+            helper.close();
         }
         return result;
     }
 
 
     public int updateUserPassword(User user) {
+        System.out.println("需要修改的用户 id" + user.getId() + "  新密码:" + user.getPassword());
         int lines = -1;
         int id = user.getId();
         if (id < 1) {
@@ -38,7 +41,7 @@ public class InsertUserHelper implements DatabaseField {
         String sqlString = "update table_user set u_password = ? where id = ?";
         helper = new DBHelper(sqlString);
         try {
-            helper.pst.setString(1, user.getPassword() == null ? user.getPassword() : "admin");
+            helper.pst.setString(1, user.getPassword() != null ? user.getPassword() : "admin");
             helper.pst.setInt(2, id);
             lines = helper.pst.executeUpdate();
             return lines;
@@ -46,6 +49,7 @@ public class InsertUserHelper implements DatabaseField {
             e.printStackTrace();
             return lines;
         } finally {
+            helper.close();
             return lines;
         }
 

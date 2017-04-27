@@ -32,6 +32,7 @@ import com.google.gson.Gson;
         "/requestGoodsDetail", "/requestUser", "/simpleBrowse",
         "/password", "/fav", "/requestFav",
         "/transRequest", "/transAccept", "/transCancel", "/transCheck", "/transUpdate",
+        "/reqTransCheck", "/reqTransCancel",
         "/addShipAddress", "/requestShipAddress",
         "/addHistory", "/requestHistory",
         "/checkDatabaseVer", "/updateLocalDatabase",
@@ -65,8 +66,6 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
         System.out.println("获取到的完整请求json串:" + json);
         // 读取完成,生成预处理对象
         PreparedJson preparedJson = new PreparedJson(json, what);
-
-
         // 任务分发&生成返回数据,doServlet()是核心方法
         String responseString = doServlet(preparedJson);
 
@@ -84,7 +83,7 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
         try {
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>MyFirstServlet</title>");
+            out.println("<title>EPay API</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h2>request api by " + request.getContextPath() + "</h2>");
@@ -142,19 +141,25 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
                 交易相关 api
              */
             case API_TYPE_ACCEPT_TRANSACTION:
-                //todo
+                result = acceptTransaction(preparedJson);
                 break;
             case API_TYPE_CANCEL_TRANSACTION:
-                //todo
+                result = cancelTransaction(preparedJson);
                 break;
             case API_TYPE_CHECK_TRANSACTION:
-                //todo
+                result = checkTransaction(preparedJson);
                 break;
             case API_TYPE_REQUEST_TRANSACTION:
-                //todo
+                result = requestTransaction(preparedJson);
                 break;
             case API_TYPE_UPDATE_TRANSACTION:
-                //todo
+                result = updateTransaction(preparedJson);
+                break;
+            case API_TYPE_CHECK_REQ_TRANSACTION:
+                result = checkReqTrans(preparedJson);
+                break;
+            case API_TYPE_CANCEL_REQ_TRANSACTION:
+                result = cancelReqTrans(preparedJson);
                 break;
             /*
                 商品相关
@@ -163,6 +168,7 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
                 result = publishGoods(preparedJson);
                 break;
             case API_TYPE_BROWSE:
+                result = simpleBrowse(preparedJson);
                 //todo
                 break;
             case API_TYPE_REQ_GOODS_DETAIL:
@@ -213,6 +219,7 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
                 result = loginBAK(preparedJson);
                 break;
             default:
+                System.out.println("为匹配到命令");
                 break;
         }
         return result;
@@ -252,6 +259,7 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
         //todo 修改密码
         ModifyPasswordImpl doModifyPassword = new ModifyPasswordImpl();
         doModifyPassword.init(user);
+        doModifyPassword.doOperate();
         ServerResult serverResult = doModifyPassword.getServerResult();
         result = Utils.gsonBuilder(serverResult, ServerResult.class);
         return result;
@@ -366,6 +374,25 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
         return result;
     }
 
+    /**
+     * 简单浏览
+     *
+     * @param preparedJson
+     * @return
+     */
+    private String simpleBrowse(PreparedJson preparedJson) {
+        show(" 执行 simpleBrowse");
+        String result = null;
+        Goods goods = new Gson().fromJson(preparedJson.getJsonObject().toString(), Goods.class);
+        SimpleBrowseImpl doSimpleBrowse = new SimpleBrowseImpl();
+        doSimpleBrowse.init(goods);
+        doSimpleBrowse.doOperate();
+        ServerResult serverResult = doSimpleBrowse.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
+
+        return result;
+    }
+
 
     /**
      * 增加收货地址
@@ -442,6 +469,132 @@ public class EPayServlet extends HttpServlet implements ErrorCode, APIHelper {
 
     }
 
+    /**
+     * 请求交易,实际在 table_req_trans 表中操作
+     *
+     * @param preparedJson
+     * @return
+     */
+    private String requestTransaction(PreparedJson preparedJson) {
+        show(" 执行 requestTransaction");
+        String result = null;
+        RequestTrans requestTrans = new Gson().fromJson(preparedJson.getJsonObject().toString(), RequestTrans.class);
+        AddRequestTransImpl doRequestTrans = new AddRequestTransImpl();
+        doRequestTrans.init(requestTrans);
+        doRequestTrans.doOperate();
+        ServerResult serverResult = doRequestTrans.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
+        return result;
+    }
+
+    /**
+     * 接受交易
+     *
+     * @param preparedJson
+     * @return
+     */
+    private String acceptTransaction(PreparedJson preparedJson) {
+        show(" 执行 acceptTransaction");
+        String result = null;
+        RequestTrans requestTrans = new Gson().fromJson(preparedJson.getJsonObject().toString(), RequestTrans.class);
+        AcceptRequestTransImpl doAcceptReqTransImpl = new AcceptRequestTransImpl();
+        doAcceptReqTransImpl.init(requestTrans);
+        doAcceptReqTransImpl.doOperate();
+        ServerResult serverResult = doAcceptReqTransImpl.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
+        return result;
+    }
+
+    /**
+     * 查看交易请求
+     *
+     * @param preparedJson
+     * @return
+     */
+    private String checkReqTrans(PreparedJson preparedJson) {
+        show("执行 checkReqTrans");
+        String result = null;
+        User user = new Gson().fromJson(preparedJson.getJsonObject().toString(), User.class);
+        CheckReqTransImpl doCheckReqTrans = new CheckReqTransImpl();
+        doCheckReqTrans.init(user);
+        doCheckReqTrans.doOperate();
+        ServerResult serverResult = doCheckReqTrans.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
+        return result;
+    }
+
+
+    /**
+     * 更新交易
+     *
+     * @param preparedJson
+     * @return
+     */
+    private String updateTransaction(PreparedJson preparedJson) {
+        show(" 执行 updateTransaction");
+        String result = null;
+        Transaction transaction = new Gson().fromJson(preparedJson.getJsonObject().toString(), Transaction.class);
+        UpdateTransImpl doUpdateTrans = new UpdateTransImpl();
+        doUpdateTrans.init(transaction);
+        doUpdateTrans.doOperate();
+        ServerResult serverResult = doUpdateTrans.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
+        return result;
+    }
+
+    /**
+     * 取消交易
+     *
+     * @param preparedJson
+     * @return
+     */
+    private String cancelTransaction(PreparedJson preparedJson) {
+        show(" 执行 cancelTransaction");
+        String result = null;
+        Transaction transaction = new Gson().fromJson(preparedJson.getJsonObject().toString(), Transaction.class);
+        CancelTransImpl doCancelTrans = new CancelTransImpl();
+        doCancelTrans.init(transaction);
+        doCancelTrans.doOperate();
+        ServerResult serverResult = doCancelTrans.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
+        return result;
+    }
+
+    /**
+     * 取消交易请求
+     *
+     * @param preparedJson
+     * @return
+     */
+    private String cancelReqTrans(PreparedJson preparedJson) {
+        show(" 执行 cancelReqTrans");
+        String result = null;
+        RequestTrans requestTrans = new Gson().fromJson(preparedJson.getJsonObject().toString(), RequestTrans.class);
+        CancelReqTransImpl doCancelReqTrans = new CancelReqTransImpl();
+        doCancelReqTrans.init(requestTrans);
+        doCancelReqTrans.doOperate();
+        ServerResult serverResult = doCancelReqTrans.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
+        return result;
+    }
+
+    /**
+     * 查看交易
+     *
+     * @param preparedJson
+     * @return
+     */
+    private String checkTransaction(PreparedJson preparedJson) {
+        show("执行 checkTransaction");
+        String result = null;
+        User user = new Gson().fromJson(preparedJson.getJsonObject().toString(), User.class);
+        CheckTransImpl doCheckTrans = new CheckTransImpl();
+        doCheckTrans.init(user);
+        doCheckTrans.doOperate();
+        ServerResult serverResult = doCheckTrans.getServerResult();
+        result = Utils.gsonBuilder(serverResult, ServerResult.class);
+        return result;
+    }
 
 
 

@@ -32,6 +32,7 @@ public class QueryCategoryHelper implements DatabaseField {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            helper.close();
             return category;
         }
     }

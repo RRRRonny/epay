@@ -32,6 +32,7 @@ public class QueryGoodsStateHelper implements DatabaseField {
             e.printStackTrace();
             return goodsState;
         } finally {
+            helper.close();
             return goodsState;
         }
     }

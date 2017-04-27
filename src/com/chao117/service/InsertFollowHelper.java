@@ -34,6 +34,7 @@ public class InsertFollowHelper {
             e.printStackTrace();
             return lines;
         } finally {
+            helper.close();
             return lines;
         }
     }

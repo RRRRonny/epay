@@ -25,6 +25,7 @@ public class InsertHistoryHelper {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            helper.close();
             return lines;
         }
     }

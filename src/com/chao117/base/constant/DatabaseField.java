@@ -98,4 +98,9 @@ public interface DatabaseField {
     String M_PRE_ID = "m_pre_id";
     String M_REMARK = "m_remark";
     String M_TIMESTAMP = "m_timestamp";
+
+    //2017年04月24日09:58:55
+    //table_req_trans
+    String RT_STATE = "rt_state";
+    String RT_TIMESTAMP = "rt_timestamp";
 }
